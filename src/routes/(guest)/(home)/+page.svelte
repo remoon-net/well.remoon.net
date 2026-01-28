@@ -18,7 +18,12 @@
 	<div class="my-3">
 		<h3 class="text-3xl my-1">well-net</h3>
 		<p>
-			<a href="https://github.com/remoon-net/well" class="link">well-net</a>
+			<a href="https://github.com/remoon-net/well" class="link" target="_blank">
+				well-net
+				<button>
+					<Iconify icon={ExtraLink}></Iconify>
+				</button>
+			</a>
 			是一款帮助用户和他人建立<b>安全交流网络</b>的组网软件.
 		</p>
 	</div>
