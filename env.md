@@ -1,0 +1,1 @@
+我使用 sveltekit 和 daisyui 进行开发, icon 使用 iconify 中的 heroicons
