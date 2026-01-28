@@ -37,8 +37,14 @@
 	async function register(form: FormData) {
 		await pb.collection('users').create(form)
 	}
+	async function oauth2Login(p: AuthProviderInfo) {
+		await pb.collection('users').authWithOAuth2({
+			provider: p.name,
+		})
+	}
 	import OTP from './otp.svelte'
 	import { getShowToast } from '$lib/Toast.svelte'
+	import type { AuthProviderInfo } from 'pocketbase'
 	let showToast = getShowToast()
 	let auths = $derived(data.auths)
 </script>
@@ -203,25 +209,7 @@
 		<div class="divider">第三方登录</div>
 		<div class="my-2">
 			{#each data.auths.oauth2.providers as p}
-				{#if p.name === 'google'}
-					<button
-						type="button"
-						class="btn btn-primary btn-outline btn-block mb-2"
-						disabled={pending.value}
-					>
-						<Iconify icon={Google}></Iconify>
-						通过 Google 登录
-					</button>
-				{:else if p.name === 'github'}
-					<button
-						type="button"
-						class="btn btn-primary btn-outline btn-block mb-2"
-						disabled={pending.value}
-					>
-						<Iconify icon={Github}></Iconify>
-						通过 Github 登录
-					</button>
-				{:else if p.displayName === '微信登录'}
+				{#if p.displayName === '微信登录'}
 					<button
 						type="button"
 						class="btn btn-primary btn-outline btn-block mb-2"
@@ -238,6 +226,35 @@
 					>
 						<Iconify icon={Phone}></Iconify>
 						使用手机验证码登录
+					</button>
+				{:else}
+					<button
+						type="button"
+						class="btn btn-primary btn-outline btn-block mb-2"
+						disabled={pending.value}
+						onclick={(e) => {
+							pending
+								.call(async () => {
+									await oauth2Login(p)
+									await redirect()
+								})
+								.catch((err) => {
+									showToast({
+										color: 'error',
+										msg: `${p.displayName} 登录出错: ${errStr(err)}`,
+									})
+								})
+						}}
+					>
+						{#if p.name === 'google'}
+							<Iconify icon={Google}></Iconify>
+							通过 Google 登录
+						{:else if p.name === 'github'}
+							<Iconify icon={Github}></Iconify>
+							通过 Github 登录
+						{:else}
+							通过 {p.displayName} 登录
+						{/if}
 					</button>
 				{/if}
 			{/each}
