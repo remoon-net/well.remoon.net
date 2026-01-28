@@ -31,7 +31,12 @@
 		<h3 class="text-xl my-1" id="download">下载安装包(64位)</h3>
 		<p>
 			其他架构的请 自己构建 或
-			<a href="https://github.com/remoon-net/well/issues" class="link">提出需求</a>
+			<a href="https://github.com/remoon-net/well/issues" class="link" target="_blank">
+				提出需求
+				<button>
+					<Iconify icon={ExtraLink}></Iconify>
+				</button>
+			</a>
 		</p>
 	</div>
 	<div class="my-3">
