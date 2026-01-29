@@ -42,12 +42,62 @@
 			provider: p.name,
 		})
 	}
+	let phoneLink = $state('')
+	let showPhoneLogin = $state(false)
+	$effect(() => {
+		showPhoneLogin = phoneLink != ''
+	})
+	let phoneCancelControl: AbortController
+	async function phoneLogin(p: AuthProviderInfo) {
+		phoneCancelControl = new AbortController()
+		phoneCancelControl.signal.addEventListener('abort', () => {
+			pb.cancelRequest('phone-login')
+		})
+		await Promise.race([
+			pb.collection('users').authWithOAuth2({
+				requestKey: 'phone-login',
+				provider: p.name,
+				urlCallback: (link) => {
+					phoneLink = link
+				},
+			}),
+			new Promise<void>((rl) => {
+				phoneCancelControl.signal.addEventListener('abort', () => {
+					rl()
+				})
+			}),
+		])
+		phoneCancelControl.abort()
+	}
 	import OTP from './otp.svelte'
 	import { getShowToast } from '$lib/Toast.svelte'
 	import type { AuthProviderInfo } from 'pocketbase'
 	let showToast = getShowToast()
 	let auths = $derived(data.auths)
 </script>
+
+<!-- Put this part before </body> tag -->
+<input
+	type="checkbox"
+	id="phone_login_modal"
+	class="modal-toggle"
+	bind:checked={showPhoneLogin}
+	onchange={(e) => {
+		if (e.currentTarget.checked) {
+			return
+		}
+		phoneCancelControl?.abort()
+	}}
+/>
+<div class="modal" role="dialog">
+	<div class="modal-box p-0">
+		<iframe src={phoneLink} class="w-full h-[300px]" frameborder="0" title="手机号登录"></iframe>
+		<div class="modal-action p-3">
+			<label for="phone_login_modal" class="btn">关闭</label>
+		</div>
+	</div>
+	<label class="modal-backdrop" for="phone_login_modal">Close</label>
+</div>
 
 <div class="container mx-auto my-6">
 	{#if auths.password.enabled || auths.otp.enabled}
@@ -218,14 +268,27 @@
 						<img src={Wechat} class="size-5" alt="wechat" width="300" height="300" />
 						通过微信扫码登录
 					</button>
-				{:else if p.displayName === '手机登录'}
+				{:else if p.displayName === '手机号登录'}
 					<button
 						type="button"
 						class="btn btn-primary btn-outline btn-block mb-2"
 						disabled={pending.value}
+						onclick={(e) => {
+							pending
+								.call(async () => {
+									await phoneLogin(p)
+									await redirect()
+								})
+								.catch((err) => {
+									showToast({
+										color: 'error',
+										msg: `${p.displayName} 登录出错: ${errStr(err)}`,
+									})
+								})
+						}}
 					>
 						<Iconify icon={Phone}></Iconify>
-						使用手机验证码登录
+						使用手机号登录
 					</button>
 				{:else}
 					<button
