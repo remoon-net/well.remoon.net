@@ -47,27 +47,14 @@
 	$effect(() => {
 		showPhoneLogin = phoneLink != ''
 	})
-	let phoneCancelControl: AbortController
 	async function phoneLogin(p: AuthProviderInfo) {
-		phoneCancelControl = new AbortController()
-		phoneCancelControl.signal.addEventListener('abort', () => {
-			pb.cancelRequest('phone-login')
+		await pb.collection('users').authWithOAuth2({
+			requestKey: 'phone-login',
+			provider: p.name,
+			urlCallback: (link) => {
+				phoneLink = link
+			},
 		})
-		await Promise.race([
-			pb.collection('users').authWithOAuth2({
-				requestKey: 'phone-login',
-				provider: p.name,
-				urlCallback: (link) => {
-					phoneLink = link
-				},
-			}),
-			new Promise<void>((rl) => {
-				phoneCancelControl.signal.addEventListener('abort', () => {
-					rl()
-				})
-			}),
-		])
-		phoneCancelControl.abort()
 	}
 	import OTP from './otp.svelte'
 	import { getShowToast } from '$lib/Toast.svelte'
@@ -86,7 +73,7 @@
 		if (e.currentTarget.checked) {
 			return
 		}
-		phoneCancelControl?.abort()
+		pb.cancelRequest('phone-login')
 	}}
 />
 <div class="modal" role="dialog">
@@ -280,6 +267,9 @@
 									await redirect()
 								})
 								.catch((err) => {
+									if (err?.isAbort) {
+										return
+									}
 									showToast({
 										color: 'error',
 										msg: `${p.displayName} 登录出错: ${errStr(err)}`,
