@@ -169,7 +169,7 @@
 								class="join-item btn btn-outline btn-square tooltip"
 								data-tip="点击复制"
 								use:copy={{
-									text: ll.whip,
+									text: ll.linker,
 									onCopy: () => {
 										showToast({
 											msg: `复制中继器连接地址成功. of ${name}`,
