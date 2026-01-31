@@ -69,7 +69,7 @@
 					<span class="label">元</span>
 				</label>
 				<div class="label">
-					充值转换比例: 1元{user.expand.psc}. 流量永久有效. 用于中继时会消耗较多流量.
+					充值转换比例: 1元{user?.expand?.psc}. 流量永久有效. 用于中继时会消耗较多流量.
 				</div>
 			</fieldset>
 			<div>

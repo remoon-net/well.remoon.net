@@ -88,11 +88,11 @@
 		<span class="tooltip" data-tip={user.remaining_bytes < 0 ? '负数是正常的' : ''}>
 			{prettyBytes(user.remaining_bytes)}
 		</span>
-		{#if !!user.expand.psc}
+		{#if !!user?.expand?.psc}
 			<label for="order_create_modal" class="btn btn-xs btn-outline">充值</label>
 		{/if}
 	</div>
-	{#if !!user.expand.psc}
+	{#if !!user?.expand?.psc}
 		<div class="my-1">
 			<span>进入:</span>
 			<a href="/user/orders">

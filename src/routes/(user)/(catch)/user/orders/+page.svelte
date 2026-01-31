@@ -32,7 +32,7 @@
 			<label for="order_create_modal" class="btn btn-primary btn-outline">流量充值</label>
 		</div>
 		<div class="label">
-			充值转换比例: 1元{user.expand.psc}, 目前余量有: {prettyBytes(user.remaining_bytes)}
+			充值转换比例: 1元{user?.expand?.psc}, 目前余量有: {prettyBytes(user.remaining_bytes)}
 		</div>
 	</div>
 	<div class="divider"></div>
