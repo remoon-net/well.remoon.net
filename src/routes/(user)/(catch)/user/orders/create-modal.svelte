@@ -61,7 +61,7 @@
 						placeholder="1"
 						value="1"
 						min="0.01"
-						max="50"
+						max="5000"
 						step="0.01"
 						bind:this={amount}
 						disabled={pending.value}
