@@ -42,21 +42,21 @@
 	<div class="my-3">
 		<div class="join flex-wrap">
 			<a
-				href="/install/{version}/well-net-x64.exe"
+				href="/install/well-net-{version}-x64.exe"
 				download="well-net-x64.exe"
 				class="join-item btn btn-primary btn-outline"
 			>
 				Windows
 			</a>
 			<a
-				href="/install/{version}/well-net-arm64.apk"
+				href="/install/well-net-{version}-arm64.apk"
 				download="well-net-arm64.apk"
 				class="join-item btn btn-primary btn-outline"
 			>
 				Android
 			</a>
 			<a
-				href="/install/{version}/well-net-x64.deb"
+				href="/install/well-net-{version}-x64.deb"
 				download="well-net-x64.deb"
 				class="join-item btn btn-primary btn-outline"
 			>
