@@ -89,7 +89,9 @@
 			{prettyBytes(user.remaining_bytes)}
 		</span>
 		{#if !!user?.expand?.psc}
-			<label for="order_create_modal" class="btn btn-xs btn-outline">充值</label>
+			<label for="order_create_modal" class="btn btn-xs btn-outline">
+				充值 (1元{user?.expand?.psc}, 永久有效)
+			</label>
 		{/if}
 	</div>
 	{#if !!user?.expand?.psc}
