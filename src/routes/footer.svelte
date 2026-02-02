@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Iconify from '@iconify/svelte'
 	import ExtraLink from '@iconify-icons/heroicons/arrow-top-right-on-square'
+	import Telegram from '@iconify-icons/logos/telegram'
 </script>
 
 <footer class="footer sm:footer-horizontal container mx-auto p-10">
@@ -28,6 +29,12 @@
 	</nav>
 	<nav>
 		<h6 class="footer-title">社区</h6>
+		<a href="https://t.me/salt_well" class="link link-hover" target="_blank">
+			t.me/salt_well <button><Iconify icon={Telegram}></Iconify></button>
+		</a>
+		<a href="https://qm.qq.com/q/8bJ2CPJ0Xe" class="link link-hover" target="_blank">
+			QQ群: 702061841 <button><Iconify icon={ExtraLink}></Iconify></button>
+		</a>
 		<a href="https://github.com/remoon-net/well/issues" class="link link-hover" target="_blank">
 			问题反馈 <button><Iconify icon={ExtraLink}></Iconify></button>
 		</a>
