@@ -12,8 +12,11 @@
 		}
 	})
 	import ExtraLink from '@iconify-icons/heroicons/arrow-top-right-on-square'
+	import { copy } from 'svelte-copy'
+	import { getShowToast } from '$lib/Toast.svelte'
 	let { data } = $props()
 	let pfiles = $derived(data.pfiles)
+	const showToast = getShowToast()
 </script>
 
 <div class="container mx-auto my-6">
@@ -122,6 +125,34 @@
 			</label>
 		</div>
 	</div>
+	{#if import.meta.env['VITE_PEER_SHARELINK']}
+		{@const sl = import.meta.env['VITE_PEER_SHARELINK']}
+		{@const ip6 = new URL(sl).searchParams.get('ip6')!.replace('/128', '')}
+		<div class="my-3">
+			<h3 class="text-xl my-3">示例节点分享链接</h3>
+			<div class="join w-full">
+				<button
+					class="join-item btn"
+					type="button"
+					use:copy={{
+						text: sl,
+						onCopy: () => {
+							showToast({
+								msg: `复制成功: 示例节点分享链接`,
+							})
+						},
+					}}
+				>
+					点击复制
+				</button>
+				<input class="join-item input flex-1" type="url" readonly value={sl} />
+			</div>
+			<div class="my-2">
+				访问此节点: <a class="link" href="http://[{ip6}]" target={ip6}>{ip6}</a>
+			</div>
+		</div>
+	{/if}
+
 	<div class="my-3">
 		<h3 class="text-xl my-1">特性</h3>
 		<p class="my-1">well-net 是基于 WireGuard 和 WebRTC 编写的</p>
