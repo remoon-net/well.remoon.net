@@ -12,6 +12,8 @@
 		}
 	})
 	import ExtraLink from '@iconify-icons/heroicons/arrow-top-right-on-square'
+	let { data } = $props()
+	let pfiles = $derived(data.pfiles)
 </script>
 
 <div class="container mx-auto my-6">
@@ -42,37 +44,42 @@
 	<div class="my-3">
 		<div class="join flex-wrap">
 			<a
-				href="/install/well-net-{version}-x64.exe"
-				download="well-net-x64.exe"
+				href={pfiles.windows?.download}
+				download={pfiles.windows?.filename}
 				class="join-item btn btn-primary btn-outline"
+				class:btn-disabled={!pfiles.windows?.download}
 			>
 				Windows
 			</a>
 			<a
-				href="/install/well-net-{version}-arm64.apk"
-				download="well-net-arm64.apk"
+				href={pfiles.android?.download}
+				download={pfiles.android?.filename}
 				class="join-item btn btn-primary btn-outline"
+				class:btn-disabled={!pfiles.android?.download}
 			>
 				Android
 			</a>
 			<a
-				href="/install/well-net-{version}-x64.deb"
-				download="well-net-x64.deb"
+				href={pfiles.linux?.download}
+				download={pfiles.linux?.filename}
 				class="join-item btn btn-primary btn-outline"
+				class:btn-disabled={!pfiles.linux?.download}
 			>
 				Linux (deb)
 			</a>
 			<a
 				href="#disabled"
 				download="well-net.exe"
-				class="join-item btn btn-primary btn-outline btn-disabled"
+				class="join-item btn btn-primary btn-outline"
+				class:btn-disabled={true}
 			>
 				iPhone
 			</a>
 			<a
 				href="#disabled"
 				download="well-net.exe"
-				class="join-item btn btn-primary btn-outline btn-disabled"
+				class="join-item btn btn-primary btn-outline"
+				class:btn-disabled={true}
 			>
 				MacOS
 			</a>
@@ -105,7 +112,11 @@
 	<div class="my-3">
 		<h3 class="text-xl my-3">使用教程</h3>
 		<div>
-			<label for="guide-video-modal" class="btn btn-outline">
+			<label
+				for="guide-video-modal"
+				class="btn btn-outline"
+				class:btn-disabled={!pfiles.guide?.download}
+			>
 				<Iconify icon={Play}></Iconify>
 				点击播放使用教程
 			</label>
@@ -154,12 +165,14 @@
 <div class="modal" role="dialog">
 	<div class="modal-box max-w-6xl w-full">
 		<h3 class="text-xl mb-3">well-net 使用教程</h3>
-		<video
-			bind:this={guideVideo}
-			class="w-full aspect-video object-cover"
-			src="/install/guide.mp4"
-			controls
-		></video>
+		{#if !!pfiles.guide?.download}
+			<video
+				bind:this={guideVideo}
+				class="w-full aspect-video object-cover"
+				src={pfiles.guide.download}
+				controls
+			></video>
+		{/if}
 		<div class="modal-action">
 			<label for="guide-video-modal" class="btn btn-outline"> 关闭 </label>
 		</div>
