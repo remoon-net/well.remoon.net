@@ -202,6 +202,7 @@
 				class="w-full aspect-video object-cover"
 				src={pfiles.guide.download}
 				controls
+				muted
 			></video>
 		{/if}
 		<div class="modal-action">
