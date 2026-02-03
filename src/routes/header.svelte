@@ -27,10 +27,18 @@
 
 <div class="navbar container mx-auto">
 	<div class="navbar-start">
-		<a href="/" class="btn btn-ghost text-xl">well-net</a>
+		<a href="/" class="btn btn-ghost text-xl px-2">
+			<img
+				src="/android-chrome-192x192.png"
+				alt="well-net"
+				class="size-6"
+				width="192"
+				height="192"
+			/>
+			well-net
+		</a>
 	</div>
-	<div class="navbar-center">
-	</div>
+	<div class="navbar-center"></div>
 	<div class="navbar-end">
 		<ul class="menu menu-horizontal">
 			<li>
