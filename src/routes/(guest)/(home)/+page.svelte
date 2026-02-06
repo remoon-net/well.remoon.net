@@ -115,14 +115,17 @@
 	<div class="my-3">
 		<h3 class="text-xl my-3">使用教程</h3>
 		<div>
-			<label
-				for="guide-video-modal"
-				class="btn btn-outline"
-				class:btn-disabled={!pfiles.guide?.download}
-			>
-				<Iconify icon={Play}></Iconify>
-				点击播放使用教程
-			</label>
+			<div class="join">
+				<label
+					for="guide-video-modal"
+					class="join-item btn btn-outline"
+					class:btn-disabled={!pfiles.guide?.download}
+				>
+					<Iconify icon={Play}></Iconify>
+					点击播放使用教程
+				</label>
+				<a href="/well-jsnet/" class="join-item btn btn-outline">在浏览器中体验</a>
+			</div>
 		</div>
 	</div>
 	{#if import.meta.env['VITE_PEER_SHARELINK']}
