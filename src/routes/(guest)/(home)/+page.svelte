@@ -79,7 +79,7 @@
 					<Iconify icon={ExtraLink}></Iconify>
 				</button>
 			</a>
-			是一款帮助用户和他人建立<b>内部交流网络</b>的组网软件.
+			是一款帮助用户和他人建立<b>内部交流网络</b>的开源组网软件.
 		</p>
 	</div>
 	<div class="my-3">
