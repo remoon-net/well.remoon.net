@@ -16,6 +16,7 @@
 	})
 	import { x25519 } from '@noble/curves/ed25519.js'
 	import { toString, fromString } from 'uint8arrays'
+	const showToast = getShowToast()
 	async function tryWellNet(signal: AbortSignal, data: FormData) {
 		let key = localStorage.getItem('well-jsnet-key')
 		if (!key) {
@@ -26,7 +27,8 @@
 		let pubkey = x25519.getPublicKey(fromString(key, 'base64pad'))
 		console.log('公钥:', toString(pubkey, 'base64pad'))
 		eruda.show('network')
-		await fetch('https://unpkg.com/well-net/gojs/well-jsnet.wasm')
+		showToast({ msg: '下载well-jsnet.wasm(5M)中, 耗时较久请耐心等待' })
+		await fetch('https://unpkg.com/well-net/gojs/well-jsnet.wasm').then((r) => r.arrayBuffer())
 		eruda.show('console')
 		// @ts-ignore
 		const WellNet = await import('https://unpkg.com/well-net/index.js')
@@ -51,6 +53,7 @@
 	let { data } = $props()
 	import Iconify from '@iconify/svelte'
 	import ExtraLink from '@iconify-icons/heroicons/arrow-top-right-on-square'
+	import { getShowToast } from '$lib/Toast.svelte'
 
 	let pubkey = $state('')
 	let whip = $state('')
