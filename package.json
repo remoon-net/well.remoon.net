@@ -25,6 +25,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/vite": "^4.1.18",
 		"@types/luxon": "^3.7.1",
+		"bowser": "^2.13.1",
 		"daisyui": "^5.5.14",
 		"eruda": "^3.4.3",
 		"luxon": "^3.7.2",

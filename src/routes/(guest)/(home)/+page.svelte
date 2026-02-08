@@ -1,5 +1,4 @@
 <script lang="ts">
-	const version = 'v0.0.1'
 	import Iconify from '@iconify/svelte'
 	import Play from '@iconify-icons/heroicons/play'
 	let guideVideo = $state<HTMLVideoElement>()
@@ -12,11 +11,62 @@
 		}
 	})
 	import ExtraLink from '@iconify-icons/heroicons/arrow-top-right-on-square'
+	import Expand from '@iconify-icons/heroicons/chevron-right'
+	import Expand2 from '@iconify-icons/heroicons/chevron-left'
 	import { copy } from 'svelte-copy'
 	import { getShowToast } from '$lib/Toast.svelte'
 	let { data } = $props()
 	let pfiles = $derived(data.pfiles)
 	const showToast = getShowToast()
+	import type { InstallerFile } from './+page'
+	let pfiles2 = $derived.by(() => {
+		let pfiles: { name: string; installer?: InstallerFile; current: boolean }[] = [
+			{
+				name: 'Windows',
+				installer: data.pfiles.windows,
+				current: data.browserOS === 'Windows',
+			},
+			{
+				name: 'Android',
+				installer: data.pfiles.android,
+				current: data.browserOS === 'Android',
+			},
+			{
+				name: 'Linux (deb)',
+				installer: data.pfiles.linux,
+				current: data.browserOS === 'Linux',
+			},
+			{
+				name: 'iPhone',
+				// installer: data.pfiles.linux,
+				current: data.browserOS === 'iOS',
+			},
+			{
+				name: 'macOS',
+				// installer: data.pfiles.linux,
+				current: data.browserOS === 'macOS',
+			},
+		]
+		return pfiles
+	})
+	let expand = $state(false)
+	let pfiles3 = $derived.by(() => {
+		if (expand) {
+			return pfiles2.sort((a, b) => {
+				if (a.current) {
+					return -1
+				}
+				return 1
+			})
+		}
+		let f = pfiles2.filter((v) => {
+			return v.current
+		})
+		if (f.length === 0) {
+			return pfiles2.slice(0, 1)
+		}
+		return f
+	})
 </script>
 
 <div class="container mx-auto my-6">
@@ -46,46 +96,58 @@
 	</div>
 	<div class="my-3">
 		<div class="join flex-wrap">
-			<a
-				href={pfiles.windows?.download}
-				download={pfiles.windows?.filename}
-				class="join-item btn btn-primary btn-outline"
-				class:btn-disabled={!pfiles.windows?.download}
+			{#each pfiles3 as pf}
+				<a
+					href={pf.installer?.download}
+					download={pf.installer?.filename}
+					class="join-item btn btn-outline"
+					class:btn-primary={pf.current}
+					class:btn-disabled={!pf.installer?.download}
+				>
+					{pf.name}
+				</a>
+			{/each}
+			<button
+				type="button"
+				class="join-item btn btn-outline tooltip"
+				data-tip="展开其他平台的下载安装包"
+				onclick={() => {
+					expand = !expand
+				}}
 			>
-				Windows
-			</a>
-			<a
-				href={pfiles.android?.download}
-				download={pfiles.android?.filename}
-				class="join-item btn btn-primary btn-outline"
-				class:btn-disabled={!pfiles.android?.download}
-			>
-				Android
-			</a>
-			<a
-				href={pfiles.linux?.download}
-				download={pfiles.linux?.filename}
-				class="join-item btn btn-primary btn-outline"
-				class:btn-disabled={!pfiles.linux?.download}
-			>
-				Linux (deb)
-			</a>
-			<a
-				href="#disabled"
-				download="well-net.exe"
-				class="join-item btn btn-primary btn-outline"
-				class:btn-disabled={true}
-			>
-				iPhone
-			</a>
-			<a
-				href="#disabled"
-				download="well-net.exe"
-				class="join-item btn btn-primary btn-outline"
-				class:btn-disabled={true}
-			>
-				MacOS
-			</a>
+				{#if expand}
+					<Iconify icon={Expand2}></Iconify>
+				{:else}
+					<Iconify icon={Expand}></Iconify>
+				{/if}
+			</button>
+		</div>
+	</div>
+	<div class="my-3">
+		<h3 class="text-xl my-3">使用教程</h3>
+		<div>
+			<div class="join">
+				<label
+					for="guide-video-modal"
+					class="join-item btn btn-primary btn-outline"
+					class:btn-disabled={!pfiles?.guide?.download}
+				>
+					用户教程
+					<Iconify icon={Play}></Iconify>
+				</label>
+				<label
+					for="guide2-video-modal"
+					class="join-item btn btn-outline"
+					class:btn-disabled={!pfiles?.guide?.download}
+				>
+					服务提供者
+					<Iconify icon={Play}></Iconify>
+				</label>
+				<a href="/well-jsnet/" class="join-item btn btn-outline" target="well-jsnet">
+					在浏览器中体验
+					<Iconify icon={ExtraLink}></Iconify>
+				</a>
+			</div>
 		</div>
 	</div>
 	<div class="my-3">
@@ -110,22 +172,6 @@
 				自建信令中继
 				<Iconify icon={ExtraLink}></Iconify>
 			</a>
-		</div>
-	</div>
-	<div class="my-3">
-		<h3 class="text-xl my-3">使用教程</h3>
-		<div>
-			<div class="join">
-				<label
-					for="guide-video-modal"
-					class="join-item btn btn-outline"
-					class:btn-disabled={!pfiles.guide?.download}
-				>
-					<Iconify icon={Play}></Iconify>
-					点击播放使用教程
-				</label>
-				<a href="/well-jsnet/" class="join-item btn btn-outline">在浏览器中体验</a>
-			</div>
 		</div>
 	</div>
 	{#if import.meta.env['VITE_PEER_SHARELINK']}
@@ -199,11 +245,11 @@
 <div class="modal" role="dialog">
 	<div class="modal-box max-w-6xl w-full">
 		<h3 class="text-xl mb-3">well-net 使用教程</h3>
-		{#if !!pfiles.guide?.download}
+		{#if !!pfiles?.guide?.download}
 			<video
 				bind:this={guideVideo}
 				class="w-full aspect-video object-cover"
-				src={pfiles.guide.download}
+				src={pfiles?.guide.download}
 				controls
 				muted
 			></video>
