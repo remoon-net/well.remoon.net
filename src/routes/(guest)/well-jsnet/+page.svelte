@@ -51,6 +51,13 @@
 	let { data } = $props()
 	import Iconify from '@iconify/svelte'
 	import ExtraLink from '@iconify-icons/heroicons/arrow-top-right-on-square'
+
+	let pubkey = $state('')
+	let whip = $state('')
+	onMount(() => {
+		pubkey = localStorage.getItem('well-jsnet-test-pubkey') || data.speer.pubkey
+		whip = localStorage.getItem('well-jsnet-test-whip') || data.speer.whip
+	})
 </script>
 
 <div class="container mx-auto my-6">
@@ -92,9 +99,17 @@
 					type="text"
 					class="input w-full"
 					placeholder="WireGuard公钥"
-					value={data.speer.pubkey}
+					bind:value={pubkey}
 					disabled={pending.value}
 					required
+					onchange={(e) => {
+						let v = e.currentTarget.value.trim()
+						if (!v) {
+							localStorage.removeItem('well-jsnet-test-pubkey')
+							return
+						}
+						localStorage.setItem('well-jsnet-test-pubkey', v)
+					}}
 				/>
 				<div class="label"></div>
 			</fieldset>
@@ -105,8 +120,17 @@
 					type="url"
 					class="input w-full"
 					placeholder="https://well.remoon.net/peer/xxxyyyzzz"
-					value={data.speer.whip}
+					bind:value={whip}
 					disabled={pending.value}
+					required
+					onchange={(e) => {
+						let v = e.currentTarget.value.trim()
+						if (!v) {
+							localStorage.removeItem('well-jsnet-test-whip')
+							return
+						}
+						localStorage.setItem('well-jsnet-test-whip', v)
+					}}
 				/>
 				<div class="label"></div>
 			</fieldset>
