@@ -15,7 +15,7 @@
 		}
 	})
 	import { x25519 } from '@noble/curves/ed25519.js'
-	import { toString } from 'uint8arrays'
+	import { toString, fromString } from 'uint8arrays'
 	async function tryWellNet(signal: AbortSignal, data: FormData) {
 		let key = localStorage.getItem('well-jsnet-key')
 		if (!key) {
@@ -23,7 +23,8 @@
 			key = toString(key0, 'base64pad')
 			localStorage.setItem('well-jsnet-key', key)
 		}
-		console.log('公钥:', key)
+		let pubkey = x25519.getPublicKey(fromString(key, 'base64pad'))
+		console.log('公钥:', toString(pubkey, 'base64pad'))
 		eruda.show('network')
 		await fetch('https://unpkg.com/well-net/gojs/well-jsnet.wasm')
 		eruda.show('console')
