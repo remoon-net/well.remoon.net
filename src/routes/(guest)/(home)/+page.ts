@@ -11,6 +11,7 @@ export async function load({ fetch }) {
 		linux?: InstallerFile
 		android?: InstallerFile
 		guide?: InstallerFile
+		server?: InstallerFile
 	} = await pb.send('/api/collections/installer_files/platforms', { fetch }).catch((err) => {
 		console.error(err)
 		return {} as any

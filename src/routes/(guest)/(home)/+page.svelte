@@ -10,6 +10,15 @@
 			guideVideo?.pause()
 		}
 	})
+	let serverGuideVideo = $state<HTMLVideoElement>()
+	let serverGuideOpen = $state(false)
+	$effect(() => {
+		if (serverGuideOpen) {
+			serverGuideVideo?.play()
+		} else {
+			serverGuideVideo?.pause()
+		}
+	})
 	import ExtraLink from '@iconify-icons/heroicons/arrow-top-right-on-square'
 	import Expand from '@iconify-icons/heroicons/chevron-right'
 	import Expand2 from '@iconify-icons/heroicons/chevron-left'
@@ -137,9 +146,9 @@
 					<Iconify icon={Play}></Iconify>
 				</label>
 				<label
-					for="guide2-video-modal"
+					for="server-guide-video-modal"
 					class="join-item btn btn-outline"
-					class:btn-disabled={!pfiles?.guide?.download}
+					class:btn-disabled={!pfiles?.server?.download}
 				>
 					服务提供者
 					<Iconify icon={Play}></Iconify>
@@ -263,4 +272,29 @@
 		</div>
 	</div>
 	<label class="modal-backdrop" for="guide-video-modal">Close</label>
+</div>
+
+<input
+	type="checkbox"
+	id="server-guide-video-modal"
+	class="modal-toggle"
+	bind:checked={serverGuideOpen}
+/>
+<div class="modal" role="dialog">
+	<div class="modal-box max-w-6xl w-full">
+		<h3 class="text-xl mb-3">well-net 服务提供者使用教程</h3>
+		{#if !!pfiles?.server?.download}
+			<video
+				bind:this={serverGuideVideo}
+				class="w-full aspect-video object-cover"
+				src={pfiles?.server.download}
+				controls
+				muted
+			></video>
+		{/if}
+		<div class="modal-action">
+			<label for="server-guide-video-modal" class="btn btn-outline"> 关闭 </label>
+		</div>
+	</div>
+	<label class="modal-backdrop" for="server-guide-video-modal">Close</label>
 </div>
