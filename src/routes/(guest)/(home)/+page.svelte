@@ -67,6 +67,7 @@
 		}
 		return f
 	})
+	let peerDomain = import.meta.env['VITE_PEER_DOMAIN']
 </script>
 
 <div class="container mx-auto my-6">
@@ -198,6 +199,9 @@
 			</div>
 			<div class="my-2">
 				访问此节点: <a class="link" href="http://[{ip6}]" target={ip6}>{ip6}</a>
+				{#if peerDomain}
+					或使用域名 <a class="link" href="http://{peerDomain}" target={ip6}>{peerDomain}</a>
+				{/if}
 			</div>
 		</div>
 	{/if}
